@@ -1,0 +1,6 @@
+# Le projet lui-même est un repo séparé (ValentinMi/atelier-musea),
+# cloné localement dans codebase/ — jamais commité ici.
+codebase/
+
+.DS_Store
+.idea/
