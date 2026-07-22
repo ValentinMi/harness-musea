@@ -22,26 +22,31 @@ The repo's own `codebase/CLAUDE.md` is the **source of truth** for conventions (
 
 ## How to run it locally
 
-```bash
-# From codebase/
-# 1. Install dependencies (only once, or after pulling updates)
-pnpm install
-
-# 2. Start the development server
-pnpm run dev
-
-# 3. Open in browser
-http://localhost:3000
-```
-
-**Quality checks (run before every commit, from `codebase/apps/web`):**
+**Everything runs in Docker** — the client's machine (Windows) only needs **Docker Desktop**, no Node/pnpm/PostgreSQL installed. The agent manages the stack as a black box; the client only opens URLs in their browser. Use the `/lancer-projet` skill (or its commands directly):
 
 ```bash
-npx tsc --noEmit            # Type check
-npx biome check --write .   # Lint + format
+# From codebase/ — starts PostgreSQL + Strapi (CMS) + frontend, with live reload
+docker compose -f docker-compose.dev.yml --profile full up -d
+
+# Wait until `cms` and `web` are healthy:
+docker compose -f docker-compose.dev.yml --profile full ps
 ```
 
-> Le CMS Strapi (contenu, produits, ateliers) tourne séparément via `pnpm run dev:cms` → `http://localhost:1337/admin`, avec la base de données lancée par `pnpm run db:dev`.
+| URL | What |
+|-----|------|
+| `http://localhost:3000` | Le site (frontend) |
+| `http://localhost:1337/admin` | Le CMS Strapi (contenus, produits, ateliers) |
+
+The source in `codebase/` is bind-mounted into the containers: edits on the host show up live on `localhost:3000` (HMR). First start is slow (install + Strapi build); later starts are fast (dependencies cached in Docker volumes). Never run `down -v` — it would wipe the local database.
+
+**Quality checks (run before every commit, inside the running `web` container, from `codebase/`):**
+
+```bash
+docker compose -f docker-compose.dev.yml exec -w /app/apps/web web npx tsc --noEmit
+docker compose -f docker-compose.dev.yml exec -w /app/apps/web web npx biome check --write .
+```
+
+> Sur une machine de dev avec Node/pnpm installés (celle de Valentin), le mode "hôte" reste possible : `pnpm install`, `pnpm run db:dev`, `pnpm run dev`, `pnpm run dev:cms` — voir `codebase/CLAUDE.md`.
 
 ---
 

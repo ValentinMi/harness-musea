@@ -47,22 +47,22 @@ git checkout -b feat/<short-description>
 Follow the plan's "Changements attendus" section step by step.
 
 ### 4. Verify
-Quality checks first (from `apps/web`):
+
+Everything runs **through Docker** (the client's machine has no Node installed). If the dev stack is not running yet, start it first (see `CONTEXT.md` or the `/lancer-projet` skill):
 
 ```bash
-npx tsc --noEmit            # Type check — must pass
-npx biome check --write .   # Lint + format — must pass
+# From codebase/
+docker compose -f docker-compose.dev.yml --profile full up -d
 ```
 
-Then test visually, as described in `CONTEXT.md`:
+Quality checks (inside the running `web` container, from `codebase/`):
 
 ```bash
-# From codebase/ root
-pnpm install    # only if node_modules is missing
-pnpm run dev
+docker compose -f docker-compose.dev.yml exec -w /app/apps/web web npx tsc --noEmit            # must pass
+docker compose -f docker-compose.dev.yml exec -w /app/apps/web web npx biome check --write .   # must pass
 ```
 
-Open `http://localhost:3000`. Verify:
+Then test visually: the containers serve the bind-mounted source with live reload, so your edits are already visible. Open `http://localhost:3000` (frontend) — and `http://localhost:1337/admin` if the change touches CMS content. If a change doesn't show up, restart the service: `docker compose -f docker-compose.dev.yml restart web` (or `cms`). Verify:
 - The change looks correct visually.
 - No errors in the browser console or dev server output.
 - The page loads without crash.

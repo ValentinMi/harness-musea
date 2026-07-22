@@ -17,10 +17,11 @@ Dans la fenêtre de discussion, tu peux taper des commandes qui commencent par `
 
 | Commande | Quand l'utiliser |
 |----------|------------------|
+| `/lancer-projet` | **Pour voir ton site sur ton ordinateur.** L'assistant démarre tout (il te demande juste d'ouvrir Docker Desktop 🐳 si besoin), puis te donne deux liens : ton site (`localhost:3000`) et ton espace d'administration (`localhost:1337/admin`). |
 | `/nouvelle-tache` | **À chaque nouvelle demande.** C'est ton point de départ : l'assistant te dit bonjour, te pose ses questions et suit tout le processus, à chaque fois de la même façon. |
 | `/finaliser-pr` | **Si une demande a été interrompue** (ordinateur fermé, discussion coupée…). L'assistant reprend là où ça s'est arrêté et termine la proposition de changement pour Valentin. |
 
-💡 Le réflexe à avoir : **une envie de changement = `/nouvelle-tache`**. Tu n'as rien d'autre à retenir.
+💡 Le réflexe à avoir : **une envie de changement = `/nouvelle-tache`**, **une envie de voir le site = `/lancer-projet`**. Tu n'as rien d'autre à retenir.
 
 ### Ce qu'il faut retenir
 
@@ -47,9 +48,10 @@ Harness pour **Codex CLI** (GPT) permettant à une cliente non-technique de pilo
 git checkout main && git pull        # toujours partir d'un main à jour
 git checkout -b feat/<nom>           # une tâche = une branche = une PR
 # ... implémentation ...
-npx tsc --noEmit                     # depuis apps/web
-npx biome check --write .            # depuis apps/web
-pnpm run dev                         # test visuel sur localhost:3000
+# vérifications DANS le conteneur web (stack docker démarrée via /lancer-projet) :
+docker compose -f docker-compose.dev.yml exec -w /app/apps/web web npx tsc --noEmit
+docker compose -f docker-compose.dev.yml exec -w /app/apps/web web npx biome check --write .
+# test visuel : localhost:3000 (déjà servi par le conteneur, rechargement auto)
 git add <fichiers du plan>           # jamais `git add .`
 git commit -m "feat(scope): ..."     # Conventional Commits
 git push -u origin feat/<nom>
@@ -64,8 +66,11 @@ Ce repo ne contient **que le harness**. Le code du site vit dans son propre repo
 git clone git@github.com:<org>/harness-musea.git
 cd harness-musea
 git clone git@github.com:leannehmz/atelier-musea.git codebase
-cd codebase && pnpm install
 ```
+
+**Prérequis sur la machine de la cliente (Windows) : Docker Desktop uniquement** (+ git et le CLI Codex). Ni Node, ni pnpm, ni PostgreSQL : tout l'environnement de dev tourne dans Docker (`codebase/docker-compose.dev.yml`, profil `full`) et l'assistant le pilote en boîte noire via `/lancer-projet`. Les dépendances s'installent dans des volumes Docker au premier démarrage.
+
+Sur une machine de dev classique (avec Node/pnpm), le mode hôte reste possible : `cd codebase && pnpm install`, puis les commandes de `codebase/CLAUDE.md`.
 
 ⚠️ Lancer **Codex** (`codex`) **depuis la racine `harness-musea/`** (pas depuis `codebase/`), sinon les commandes `/nouvelle-tache` et `/finaliser-pr` (skills dans `.agents/skills/`) ne sont pas disponibles.
 
@@ -80,7 +85,7 @@ cd codebase && pnpm install
 | `harness/PLAN_TEMPLATE.md` | Format des plans (rédigés en français simple, lisibles par la cliente) |
 | `harness/EXECUTION_BRIEF.md` | Instructions d'exécution (Phase B) |
 | `harness/EXAMPLES.md` | 3 exemples complets de bout en bout + checklist "PR prête" |
-| `.agents/skills/` | Skills Codex : `/nouvelle-tache` (démarrer une demande) · `/finaliser-pr` (terminer une PR en cours) |
+| `.agents/skills/` | Skills Codex : `/lancer-projet` (démarrer le site + CMS via Docker) · `/nouvelle-tache` (démarrer une demande) · `/finaliser-pr` (terminer une PR en cours) |
 
 ## Sources de vérité
 
