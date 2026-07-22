@@ -1,6 +1,6 @@
 # Worked Examples
 
-This file shows 3 complete end-to-end examples of the two-agent workflow, adapted to the real Atelier Musea stack (TanStack Start + Panda CSS + Strapi). Each example goes from a French client request → Orchestrator questions → filled plan → subagent execution → PR result.
+This file shows 3 complete end-to-end examples of the two-phase workflow, adapted to the real Atelier Musea stack (TanStack Start + Panda CSS + Strapi). Each example goes from a French client request → assistant questions (Phase A) → filled plan → execution (Phase B) → PR result.
 
 ---
 
@@ -10,7 +10,7 @@ This file shows 3 complete end-to-end examples of the two-agent workflow, adapte
 
 > *"Je voudrais que le bouton 'Découvrir la boutique' sur la page d'accueil ressorte plus, là il se fond dans le fond"*
 
-### Étape 1 — Questions du Orchestrateur
+### Étape 1 — Questions de l'assistant (Phase A)
 
 > *"Salut Leanne ! Oui on peut arranger ça. Juste pour être sûr : tu veux qu'il soit plus foncé (le marron foncé de ta palette), ou carrément une autre couleur ? Et c'est bien le gros bouton en haut de la page d'accueil, pas ceux de la boutique ?"*
 
@@ -34,7 +34,7 @@ Résultat attendu :  Le bouton "Découvrir la boutique" en haut de la page d'acc
 Notes de style :  Utiliser les tokens Panda (accent.dark), jamais de valeur hexadécimale en dur. Garder le hover-state actuel.
 ```
 
-### Étape 3 — Sous-agent (Phase B)
+### Étape 3 — Exécution (Phase B)
 
 ```bash
 cd codebase
@@ -72,7 +72,7 @@ Le bouton principal de la page d'accueil est maintenant marron foncé (#6e5c44) 
 
 > *"Bonjour, sur mes fiches produit je veux changer le texte 'Ajouter au panier' en 'Commander' c'est plus direct je trouve"*
 
-### Étape 1 — Questions du Orchestrateur
+### Étape 1 — Questions de l'assistant (Phase A)
 
 > *"Salut ! Bonne idée, 'Commander' c'est plus direct. Tu veux ça sur toutes les fiches produit de la boutique ? Et est-ce qu'on garde le même bouton dans le panier, ou lui aussi change ?"*
 
@@ -120,7 +120,7 @@ Toutes les fiches produit affichent "Commander". Cohérent sur toute la boutique
 
 > *"Je veux mettre à jour ma bannière d'accueil avec une nouvelle photo de mes créations et un nouveau texte. La photo est sur mon bureau."*
 
-### Étape 1 — Questions du Orchestrateur
+### Étape 1 — Questions de l'assistant (Phase A)
 
 > *"Salut ! Pas de souci pour la bannière. J'ai besoin de quelques précisions :
 > 1. Tu peux me transférer la photo ici ? Je la placerai au bon endroit dans le projet.
@@ -175,4 +175,4 @@ La bannière de la page d'accueil affiche la nouvelle photo et le nouveau texte.
 - [ ] La branche suit le format `feat/<nom>` ou `fix/<nom>`
 - [ ] Seuls les fichiers du plan ont été stagés (pas de `git add .`)
 - [ ] La PR est ouverte et son corps décrit : demandé / fait / résultat
-- [ ] Le Orchestrateur a reçu le lien de la PR
+- [ ] Le client a reçu le lien de la PR

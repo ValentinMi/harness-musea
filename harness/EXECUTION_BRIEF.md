@@ -1,12 +1,12 @@
-# Subagent Brief — Phase B Instructions
+# Execution Brief — Phase B Instructions
 
-You are the **Subagent**. You were spawned by the Orchestrator via Claude Code's Task tool. You work **inside `codebase/`** — the git repository and project root. All `pnpm` and `git` commands run from there.
+You are in **Phase B (execution)**: the plan has been validated by the client in Phase A. You work **inside `codebase/`** — the git repository and project root. All `pnpm` and `git` commands run from there.
 
 ---
 
 ## Your Mission
 
-Read the plan passed by the Orchestrator. Execute the changes **exactly** as described. Produce a clean Pull Request ready for developer review.
+Take the plan validated in Phase A. Execute the changes **exactly** as described. Produce a clean Pull Request ready for developer review.
 
 ---
 
@@ -23,19 +23,19 @@ Read the plan passed by the Orchestrator. Execute the changes **exactly** as des
 ### Code & Style
 - Follow `STYLE_GUIDE.md`. Reuse existing CSS variables and design tokens.
 - Keep existing code patterns — don't rewrite the world.
-- Do not add new dependencies without checking with the Orchestrator first.
+- Do not add new dependencies without checking with the developer (Valentin) first.
 - Do not refactor files outside the plan's scope.
 
 ### Ambiguity
-- If the plan is **ambiguous or unclear**, ask the **Orchestrator** (not the client). The Orchestrator will re-explain in French and update the plan.
-- Do not guess. Do not ask the client directly.
+- If the plan turns out to be **ambiguous or unclear**, go back to the client **in simple French**, clarify the point, update the plan, then resume execution.
+- Do not guess.
 
 ---
 
 ## Step-by-Step Execution
 
 ### 1. Read the plan
-Read the text passed by the Orchestrator. Also read `codebase/CLAUDE.md` (repo conventions, commands, architecture) and `harness/STYLE_GUIDE.md`.
+Re-read the plan validated in Phase A. Also read `codebase/CLAUDE.md` (repo conventions, commands, architecture) and `harness/STYLE_GUIDE.md`.
 
 ### 2. Create a branch
 ```bash
@@ -96,10 +96,10 @@ Use `gh pr create` or the GitHub web interface.
 [Plain-language description of what the developer should see after the change]
 ```
 
-### 7. Report to the Orchestrator
+### 7. Report to the client
 
-Send a concise message to the Orchestrator:
-> *"La branche [branch-name] est prête. La PR est ouverte ici : [URL]. Tout est bon pour la review 👍"*
+Tell the client in French:
+> *"C'est prêt ! Tu peux venir voir la Pull Request ici : [URL]. Elle est prête pour la review 👍"*
 
 ---
 
@@ -107,7 +107,7 @@ Send a concise message to the Orchestrator:
 
 | File | Role |
 |------|------|
-| `harness/SUBAGENT_BRIEF.md` | Your full instructions (this file) |
+| `harness/EXECUTION_BRIEF.md` | Your full instructions (this file) |
 | `codebase/CLAUDE.md` | Repo conventions, commands, architecture — **source of truth** |
 | `harness/STYLE_GUIDE.md` | Design tokens, colors, fonts, tone of voice |
 | `harness/CONTEXT.md` | How to run the project locally |

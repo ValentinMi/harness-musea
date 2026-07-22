@@ -29,13 +29,13 @@ Use this template to write every action plan. Fill every section in **simple Fre
 | `path/to/file.css` | Styles du header |
 | `src/components/Navbar.jsx` | Composant de navigation |
 
-> *List the files you expect to touch. Best guess is fine — the subagent may adjust if needed.*
+> *List the files you expect to touch. Best guess is fine — adjust during Phase B if needed.*
 
 ---
 
 ## Changements attendus
 
-> *[Precise, actionable steps. Be specific enough that the subagent can execute without asking more questions.]*
+> *[Precise, actionable steps. Be specific enough that Phase B can be executed without asking more questions.]*
 
 **Étape 1 :** Trouver le composant du bouton CTA dans `apps/web/src/components/`
 **Étape 2 :** Modifier le token de couleur Panda utilisé pour le fond (ex. `accent` → `accent.dark`)
@@ -62,12 +62,12 @@ Use this template to write every action plan. Fill every section in **simple Fre
 
 ---
 
-## Notes du sous-agent
+## Notes d'exécution
 
-> *[Any additional context for the subagent — tricky areas, dependencies, gotchas. Leave blank if nothing special.]*
+> *[Any additional context for Phase B — tricky areas, dependencies, gotchas. Leave blank if nothing special.]*
 
 > *Le fichier `styles/buttons.css` surcharge certaines propriétés. Vérifier les deux fichiers après modification.*
 
 ---
 
-*Plan généré par Orchestrator · [Date]*
+*Plan généré par l'assistant · [Date]*

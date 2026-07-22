@@ -14,9 +14,9 @@ This is an e-commerce website. Built with **TanStack Start (React 19, Vite 7, SS
 
 ## Where the code lives
 
-The project is a **separate git repository cloned into `codebase/`** (remote: `github.com/ValentinMi/atelier-musea`). All `pnpm` and `git` commands run from there. The harness repo (this one) gitignores `codebase/` entirely: the two git histories never mix, and harness files are never committed to the project repo. If `codebase/` is missing, clone it first (see the root `README.md`).
+The project is a **separate git repository cloned into `codebase/`** (remote: `github.com/leannehmz/atelier-musea`). All `pnpm` and `git` commands run from there. The harness repo (this one) gitignores `codebase/` entirely: the two git histories never mix, and harness files are never committed to the project repo. If `codebase/` is missing, clone it first (see the root `README.md`).
 
-The repo's own `codebase/CLAUDE.md` is the **source of truth** for conventions (commits, branches, architecture) — the subagent must read it.
+The repo's own `codebase/CLAUDE.md` is the **source of truth** for conventions (commits, branches, architecture) — read it before any Phase B work.
 
 ---
 
@@ -59,7 +59,7 @@ npx biome check --write .   # Lint + format
 
 ## Simplified project map
 
-This is a **best-effort guidance map** — not exhaustive. The subagent should explore the directory to confirm the exact layout.
+This is a **best-effort guidance map** — not exhaustive. Explore the directory to confirm the exact layout.
 
 | Folder / Pattern | What's inside |
 |-----------------|---------------|
@@ -78,4 +78,4 @@ This is a **best-effort guidance map** — not exhaustive. The subagent should e
 - **Developer** deploys manually to a VPS after merge.
 - **Agents stop at the PR.** They never merge and never deploy.
 
-> *Note: if a request involves backend changes, secrets, database, or infrastructure — tell the Orchestrator. Those areas are out of scope for a typical front-end change.*
+> *Note: if a request involves backend changes, secrets, database, or infrastructure — those areas are out of scope for a typical front-end change. Tell the client the developer must handle it.*

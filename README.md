@@ -8,7 +8,7 @@ Ce dossier, c'est le "cerveau" de ton assistant. Grâce à lui, tu peux **modifi
 
 1. **Tu expliques** ce que tu veux changer, avec tes mots. Par exemple : *"Je voudrais que le bouton de la page d'accueil soit plus visible."*
 2. **L'assistant te pose des questions** pour être sûr de bien comprendre, puis il te montre un petit plan de ce qu'il va faire. Rien ne se lance sans ton accord.
-3. **Un second assistant fait le travail** dans le code, tranquillement, sur une copie de travail — jamais directement sur ton site en ligne.
+3. **L'assistant fait ensuite le travail** dans le code, tranquillement, sur une copie de travail — jamais directement sur ton site en ligne.
 4. **Valentin vérifie et met en ligne.** Chaque modification passe par une "Pull Request" : une proposition de changement que Valentin relit avant de la publier. Ton site ne peut donc jamais casser sans qu'un humain ait vérifié.
 
 ### Tes deux commandes magiques
@@ -36,10 +36,10 @@ Dans la fenêtre de discussion, tu peux taper des commandes qui commencent par `
 
 ## Vue d'ensemble
 
-Harness à deux agents pour laisser une cliente non-technique piloter des modifications front-end sur le site Atelier Musea (`codebase/`, repo `ValentinMi/atelier-musea`) :
+Harness pour **Codex CLI** (GPT) permettant à une cliente non-technique de piloter des modifications front-end sur le site Atelier Musea (`codebase/`, repo `leannehmz/atelier-musea`). Un seul assistant, deux phases strictement séparées :
 
-- **Orchestrateur** (Phase A) — discute en français avec la cliente, reformule, écrit un plan, le fait valider, puis délègue via l'outil Task. Il ne modifie **jamais** le code.
-- **Sous-agent** (Phase B) — travaille dans `codebase/`, exécute le plan, vérifie, ouvre une PR. Il ne merge et ne déploie **jamais**.
+- **Phase A (planification)** — l'assistant discute en français avec la cliente, reformule, écrit un plan et le fait valider. Il ne modifie **jamais** le code en Phase A.
+- **Phase B (exécution)** — l'assistant travaille dans `codebase/`, exécute le plan validé, vérifie, ouvre une PR. Il ne merge et ne déploie **jamais**.
 
 ## Git flow (Phase B)
 
@@ -58,29 +58,29 @@ gh pr create                         # la PR s'arrête là — merge + déploiem
 
 ## Installation
 
-Ce repo ne contient **que le harness**. Le code du site vit dans son propre repo (`ValentinMi/atelier-musea`) et se clone dans `codebase/`, qui est gitignoré :
+Ce repo ne contient **que le harness**. Le code du site vit dans son propre repo (`leannehmz/atelier-musea`) et se clone dans `codebase/`, qui est gitignoré :
 
 ```bash
 git clone git@github.com:<org>/harness-musea.git
 cd harness-musea
-git clone git@github.com:ValentinMi/atelier-musea.git codebase
+git clone git@github.com:leannehmz/atelier-musea.git codebase
 cd codebase && pnpm install
 ```
 
-⚠️ Lancer Claude Code **depuis la racine `harness-musea/`** (pas depuis `codebase/`), sinon les commandes `/nouvelle-tache` et `/finaliser-pr` ne sont pas disponibles.
+⚠️ Lancer **Codex** (`codex`) **depuis la racine `harness-musea/`** (pas depuis `codebase/`), sinon les commandes `/nouvelle-tache` et `/finaliser-pr` (skills dans `.agents/skills/`) ne sont pas disponibles.
 
 ## Fichiers du harness
 
 | Fichier | Rôle |
 |---------|------|
-| `AGENTS.md` | Persona et règles de l'Orchestrateur |
+| `AGENTS.md` | Persona et règles de l'assistant (lu automatiquement par Codex) |
 | `harness/WORKFLOW.md` | Processus complet Phase A → Phase B |
 | `harness/CONTEXT.md` | Projet : où est le code, comment le lancer, comment il est maintenu |
 | `harness/STYLE_GUIDE.md` | Règles de style et ton de voix — la palette et les fontes sont **référencées**, la source de vérité est `codebase/apps/web/panda.config.ts` |
 | `harness/PLAN_TEMPLATE.md` | Format des plans (rédigés en français simple, lisibles par la cliente) |
-| `harness/SUBAGENT_BRIEF.md` | Instructions d'exécution du sous-agent |
+| `harness/EXECUTION_BRIEF.md` | Instructions d'exécution (Phase B) |
 | `harness/EXAMPLES.md` | 3 exemples complets de bout en bout + checklist "PR prête" |
-| `.claude/commands/` | `/nouvelle-tache` (démarrer une demande) · `/finaliser-pr` (terminer une PR en cours) |
+| `.agents/skills/` | Skills Codex : `/nouvelle-tache` (démarrer une demande) · `/finaliser-pr` (terminer une PR en cours) |
 
 ## Sources de vérité
 

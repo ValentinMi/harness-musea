@@ -1,10 +1,10 @@
-# Two-Agent Workflow
+# Two-Phase Workflow
 
-This document describes the end-to-end process for making a change to the project.
+This document describes the end-to-end process for making a change to the project. A single assistant (Codex CLI) handles both phases: **Phase A** (understand and plan, with the client) then **Phase B** (execute, inside `codebase/`).
 
 ---
 
-## Phase A — Orchestrator (with the client)
+## Phase A — Comprendre & planifier (with the client)
 
 Phase A is fully in **French**. The client speaks French only and knows HTML/CSS only.
 
@@ -48,36 +48,22 @@ Show the full plan to the client in French:
 
 Get explicit confirmation. Do not proceed without it.
 
-### Step 5 — Déléguer au sous-agent
+### Step 5 — Passer en Phase B
 
-The Orchestrator calls the **Task tool** (Agent) directly — a normal tool call in the conversation, no UI panel or shortcut.
+Once the plan is validated, tell the client in French:
+> *"Parfait, c'est parti ! Je m'occupe de la modification dans le projet. Je te redis quand c'est prêt pour la review 👍"*
 
-**Tool call:**
-- `description`: short label of the task
-- `prompt`:
-
-```
-Work inside the git repository at codebase/ (project root — all pnpm and git
-commands run from there). First read harness/SUBAGENT_BRIEF.md and
-codebase/CLAUDE.md, then execute the plan below.
-
-=== PLAN START ===
-[Full plan text from Step 3]
-=== PLAN END ===
-```
-
-**After spawning**, tell the client in French:
-> *"Parfait, c'est parti ! Je lance un assistant qui va travailler dans le projet. Je te redis quand c'est prêt pour la review 👍"*
+Then switch to execution mode: work **inside the git repository at `codebase/`** (project root — all `pnpm` and `git` commands run from there). First read `harness/EXECUTION_BRIEF.md` and `codebase/CLAUDE.md`, then execute the plan from Step 3.
 
 ---
 
-## Phase B — Sous-agent (inside `codebase/`)
+## Phase B — Exécution (inside `codebase/`)
 
-The subagent works **inside `codebase/`** (the git repository — all commands below run from there), follows the plan, and never touches `main`.
+The assistant works **inside `codebase/`** (the git repository — all commands below run from there), follows the plan, and never touches `main`.
 
 ### Step 6 — Lire le plan
 
-Read `harness/SUBAGENT_BRIEF.md`, `codebase/CLAUDE.md`, and the plan passed by the orchestrator.
+Read `harness/EXECUTION_BRIEF.md`, `codebase/CLAUDE.md`, and the validated plan from Phase A.
 
 ### Step 7 — Créer une branche
 
@@ -91,13 +77,13 @@ Example: `git checkout -b feat/hero-button-color`
 
 ### Step 8 — Implémenter les changements
 
-Follow the plan exactly. Use `STYLE_GUIDE.md` for design consistency. If the plan is ambiguous, ask the orchestrator (not the client) — the orchestrator will re-explain.
+Follow the plan exactly. Use `STYLE_GUIDE.md` for design consistency. If the plan turns out to be ambiguous, go back to the client in simple French, clarify, update the plan, then resume.
 
 Key rules:
 - Reuse existing CSS variables and design tokens.
 - Keep the existing code style and patterns.
 - Do not refactor unrelated files.
-- Do not add new dependencies without checking with the orchestrator first.
+- Do not add new dependencies without checking with the developer (Valentin) first.
 
 ### Step 9 — Vérifier
 
@@ -148,24 +134,17 @@ Commit format: Conventional Commits with scope, e.g. `feat(boutique): change CTA
 [Plain-language description of what the developer should see]
 ```
 
-### Step 11 — Reporter au orchestrateur
+### Step 11 — Reporter au client
 
-When done, send a message to the orchestrator:
-> *"La branche [branch-name] est prête. La PR est ouverte ici : [URL]. Tout est bon pour la review 👍"*
-
----
-
-## Phase A — Orchestrator (report back to client)
-
-Tell the client in French:
+When done, tell the client in French:
 > *"C'est prêt ! Le code est en ligne, tu peux venir review la Pull Request. Voici le lien : [URL] 👍"*
 
 ---
 
 ## Summary
 
-| Phase | Who | Where | Language |
-|-------|-----|-------|----------|
-| A (understand, plan, delegate) | Orchestrator | Repo root (never edits code) | French |
-| B (implement, test, PR) | Subagent | `codebase/` | English (code) |
-| A (report) | Orchestrator | Outside project | French |
+| Phase | What | Where | Language |
+|-------|------|-------|----------|
+| A (understand, plan, validate) | Plan with the client — never edits code | Repo root | French |
+| B (implement, test, PR) | Execute the validated plan | `codebase/` | English (code) |
+| Report | Give the PR link to the client | — | French |

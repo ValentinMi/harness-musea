@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This guide ensures every change stays **consistent** with the existing design. The subagent must read it before touching any CSS or visual element.
+This guide ensures every change stays **consistent** with the existing design. Read it before touching any CSS or visual element.
 
 ---
 
@@ -60,4 +60,4 @@ In all client-facing text (labels, messages, notifications):
 - Do not change the color palette without explicit client request + confirmation.
 - Do not add animations without checking the style.
 - Do not strip existing classes or refactor unrelated code.
-- Do not add external dependencies without the Orchestrator's approval.
+- Do not add external dependencies without the developer's (Valentin) approval.
